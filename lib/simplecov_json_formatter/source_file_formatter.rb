@@ -8,11 +8,12 @@ module SimpleCovJSONFormatter
     end
 
     def format
-      if SimpleCov.branch_coverage?
-        line_coverage.merge(branch_coverage)
-      else
-        line_coverage
-      end
+      result = if SimpleCov.branch_coverage?
+                 line_coverage.merge(branch_coverage)
+               else
+                 line_coverage
+               end
+      result.merge(coverage_statistics)
     end
 
     private
@@ -60,6 +61,19 @@ module SimpleCovJSONFormatter
         end_line: branch.end_line,
         coverage: parse_line(branch)
       }
+    end
+
+    def coverage_statistics
+      stats = {
+        covered_percent: @source_file.covered_percent.round(2),
+        covered_lines: @source_file.covered_lines.count,
+        total_lines: @source_file.lines_of_code
+      }
+
+      min_line_coverage = SimpleCov.minimum_coverage&.[](:line)
+      stats[:minimum_coverage_met] = @source_file.covered_percent >= min_line_coverage if min_line_coverage
+
+      stats
     end
   end
 end

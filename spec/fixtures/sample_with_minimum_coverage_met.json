@@ -33,14 +33,9 @@
       ],
       "covered_percent": 90.0,
       "covered_lines": 9,
-      "total_lines": 10
+      "total_lines": 10,
+      "minimum_coverage_met": true
     }
   },
-  "groups": {
-    "My Group": {
-      "lines": {
-        "covered_percent": 80.0
-      }
-    }
-  }
+  "groups": {}
 }
