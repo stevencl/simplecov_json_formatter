@@ -76,5 +76,27 @@ describe SimpleCov::Formatter::JSONFormatter do
         expect(json_ouput).to eq(json_result('sample_groups'))
       end
     end
+
+    context 'with minimum coverage met' do
+      before do
+        allow(SimpleCov).to receive(:minimum_coverage).and_return({ line: 80.0 })
+      end
+
+      it 'reports minimum_coverage_met as true when coverage exceeds minimum' do
+        subject.format(result)
+        expect(json_ouput).to eq(json_result('sample_with_minimum_coverage_met'))
+      end
+    end
+
+    context 'with minimum coverage not met' do
+      before do
+        allow(SimpleCov).to receive(:minimum_coverage).and_return({ line: 95.0 })
+      end
+
+      it 'reports minimum_coverage_met as false when coverage is below minimum' do
+        subject.format(result)
+        expect(json_ouput).to eq(json_result('sample_with_minimum_coverage_not_met'))
+      end
+    end
   end
 end
